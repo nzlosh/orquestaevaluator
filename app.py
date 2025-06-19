@@ -34,11 +34,16 @@ def handle_evaluate():
     if not "yaml" in data:
         return json_error_response("yaml is missing")
 
-    if data['st2_host'] and data['st2_key'] and data['st2_execution']:
+    if data['st2_host'] and (data.get("st2_token") or data.get('st2_key')) and data['st2_execution']:
         from st2client.client import Client
         import json
+        auth_kwargs = {}
+        if data["st2_key"]:
+            auth_kwargs["api_key"] = data['st2_key']
+        else:
+            auth_kwargs["token"] = data["st2_token"]
         try:
-            client = Client(api_url=data['st2_host'] + '/api/v1', api_key=data['st2_key'])
+            client = Client(api_url=data['st2_host'] + '/api/v1', **auth_kwargs)
             execution = client.liveactions.get_by_id(data['st2_execution'])
             payload = execution.result
         except Exception as e:

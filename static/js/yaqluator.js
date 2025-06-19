@@ -5,11 +5,12 @@ var $resultArea = $("#result");
 var $yaqlAlert = $("#yaqlAlert");
 var $yamlAlert = $("#yamlAlert");
 var $st2Host = $("#st2Host");
+var $st2UserToken = $("#st2UserToken");
 var $st2Key = $("#st2Key");
 var $st2Execution = $("#st2Execution");
 
 //api
-var apiServerString = "/api";
+var apiServerString = "api";
 var apiEvaluate = "/evaluate/";
 var autoComplete = apiServerString + "/autoComplete/";
 var evalReqObj = {
@@ -17,6 +18,7 @@ var evalReqObj = {
     "yaql_expression": "",
     "st2_host": "",
     "st2_key": "",
+    "st2_token": "",
     "st2_execution": "",
     "legacy": false
 };
@@ -53,8 +55,9 @@ function evaluate(obj) {
         url: url,
         type: "POST",
         crossDomain: false,
-        data: obj,
+        data: JSON.stringify(obj),
         dataType: "json",
+        contentType: 'application/json; charset=utf-8',
         success: function (result) {
             //alert(JSON.stringify(result));
             if (result.statusCode > 0) {
@@ -133,6 +136,7 @@ $( document ).ready(function() {
         evalReqObj.yaql_expression = $yaqlInput.val();
         evalReqObj.st2_host = $st2Host.val();
         evalReqObj.st2_key = $st2Key.val();
+        evalReqObj.st2_token = $st2UserToken.val();
         evalReqObj.st2_execution = $st2Execution.val();
         evalReqObj.legacy = $("#legacy").prop('checked');
         evaluate(evalReqObj);
