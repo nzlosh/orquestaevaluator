@@ -3,7 +3,7 @@ import types
 import yaql
 import yaql.legacy
 import yaml
-from flask import escape
+from markupsafe import escape
 
 from yaql.language import exceptions
 from yaml.parser import ParserError
